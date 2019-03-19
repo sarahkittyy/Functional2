@@ -2,6 +2,10 @@
 
 A functional language.
 
+## Usage
+
+`python functional2.py file`
+
 ## Examples
 
 * Factorizing a number

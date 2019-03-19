@@ -1,0 +1,6 @@
+fact = {x->{x-1}?{x * fact.{x-1}}:{1 & out."\n"}} 
+out.{fact.1}
+out.{fact.2}
+out.{fact.3}
+out.{fact.4}
+out.{fact.5}
