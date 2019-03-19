@@ -14,7 +14,10 @@ def interpret(lines, path):
 		lines = []
 		npath = ""
 		with open(path + file, 'r+') as f:
-			lines = f.readlines()
+			line = f.read()
+			pat = re.compile('(.*)~\\$.*', re.MULTILINE)
+			line = re.sub(pat, '\\1', line)
+			lines = line.split(';')
 			npath = os.path.dirname(f.name)
 		lines = clean(lines)
 		newenv = interpret(lines, npath + '/')

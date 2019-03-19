@@ -4,8 +4,7 @@
 		~$ Input -- Loop Index
 		~$ Output -- Whatever
 	~$ Output -- Nothing
-loop = {index->func->{func.index & {{index-1} ? {{loop.{index-1}}.func} : 0} }  }
+loop = {index->func->{func.index & {{index-1} ? {{loop.{index-1}}.func} : 0} }  };
+cat = {x->{out.x & out."\n"}};
 
-cat = {x->{out.x & out."\n"}}
-
-{loop.5}.cat
+{loop.5}.cat;

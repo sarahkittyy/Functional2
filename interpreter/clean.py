@@ -17,7 +17,6 @@ def clean(lines):
 	for line in lines:
 		line = removeSpaces(line)
 		line = re.sub(r'^\s*$', '', line)
-		line = re.sub(r'(.*)~\$.*', '\\1', line)
 		if line:
 			cleaned.append(line)
 	return cleaned

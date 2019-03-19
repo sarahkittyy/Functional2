@@ -2,13 +2,16 @@ from interpreter.clean import clean
 from interpreter.interpret import interpret
 import sys
 import os
+import re
 
 def runFile(filename):
 	lines = []
 	path = ""
 	with open(filename, 'r+') as f:
-		lines = f.readlines()
-		path = os.path.dirname(f.name)
+		line = f.read()
+		pat = re.compile('(.*)~\\$.*', re.MULTILINE)
+		line = re.sub(pat, '\\1', line)
+		lines = line.split(';')
 	lines = clean(lines)
 	return interpret(lines, path + '/')
 
