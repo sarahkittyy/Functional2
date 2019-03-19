@@ -7,9 +7,9 @@ from interpreter.clean import clean
 import re
 import os
 
-env = Environment()
-
 def interpret(lines, path):
+	env = Environment()
+	
 	def impfile(file):
 		lines = []
 		npath = ""
@@ -19,17 +19,17 @@ def interpret(lines, path):
 		lines = clean(lines)
 		newenv = interpret(lines, npath + '/')
 		env.merge(newenv)
-	
+		
 	env.variables["out"] = lambda x : print(x, end='')
 	env.variables["in"] = lambda x : input(x)
 	env.variables["import"] = lambda x : impfile(x)
 	env.variables["package"] = lambda x : env.prefix(x)
 	
 	for line in lines:
-		interpret_line(line)
+		interpret_line(line, env)
 	return env
 		
-def interpret_line(line):
+def interpret_line(line, env):
 	# assignment
 	x = re.match(r'(.*)=(.*)', line)
 	if x != None:

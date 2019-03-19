@@ -7,19 +7,11 @@ class Environment:
 		return str(self.variables)
 	
 	def prefix(self, prefix):
-		# strip the old prefix
-		newvars = {}
-		for variable, value in self.variables.items():
-			variable = variable[len(self.__prefix__):]
-			newvars[variable] = value
-		self.variables = newvars
-		# set the new prefix
 		self.__prefix__ = prefix
-		newvars = {}
-		for variable, value in self.variables.items():
-			variable = self.__prefix__ + variable
-			newvars[variable] = value
-		self.variables = newvars
 		
 	def merge(self, env):
-		self.variables.update(env.variables)
+		newdict = {}
+		for key, value in env.variables.items():
+			key = env.__prefix__ + key
+			newdict[key] = value
+		self.variables.update(newdict)

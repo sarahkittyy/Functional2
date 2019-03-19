@@ -13,18 +13,16 @@ def evalexpr(value, env: Environment):
 		return evalexpr(value[1:-1], env)
 	elif islambda(value):
 		return getlambda(value, env)
-	elif ismath(value):
-		return domath(value, env)
 	elif isquoted(value):
 		str = removeSpaces(value)[1:-1]
 		str = re.sub(r'\\n','\n',str)
 		return str
+	elif ismath(value):
+		return domath(value, env)
 	elif iscall(value):
 		return docall(value, env)
 	elif isternary(value):
 		return doternary(value, env)
-	
-	
 	elif isvar(value, env) != None:
 		return env.variables[value]
 	else:
