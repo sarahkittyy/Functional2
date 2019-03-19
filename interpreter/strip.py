@@ -3,7 +3,7 @@ from interpreter.tests import isnum, iscall, isquoted
 from interpreter.error import error
 import re
 import copy
-from interpreter.clean import removeSpaces
+from interpreter.clean import removeSpaces, clean
 
 def interpret_line(line, env):
 	# assignment
@@ -26,7 +26,7 @@ def interpret_line(line, env):
 	elif iscall(line):
 		docall(line, env)
 	else:
-		env.variables[len(env.variables)] = evalexpr(line, env)
+		env.push(evalexpr(line, env))
 	
 	return env
 
@@ -72,6 +72,7 @@ def isstack(value):
 def getstack(value, env: Environment):
 	rawvals = value.split(',')
 	newenv = copy.deepcopy(env)
+	rawvals = clean(rawvals)
 	for val in rawvals:
 		interpret_line(val, newenv)
 	return newenv

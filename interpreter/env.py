@@ -1,3 +1,5 @@
+from interpreter.tests import isnum
+
 class Environment:
 	def __init__(self):
 		self.variables = {}
@@ -15,3 +17,11 @@ class Environment:
 			key = env.__prefix__ + str(key)
 			newdict[key] = value
 		self.variables.update(newdict)
+	
+	def push(self, val):
+		count = 0
+		for key, _ in self.variables.items():
+			if isnum(key):
+				count += 1
+		self.variables[count] = val
+		return val

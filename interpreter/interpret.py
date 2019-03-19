@@ -28,6 +28,7 @@ def interpret(lines, path):
 	env.variables["import"] = lambda x : impfile(x)
 	env.variables["package"] = lambda x : env.prefix(x)
 	env.variables["get"] = lambda x : (lambda y : x.variables.get(y, None))
+	env.variables["push"] = lambda x : (lambda y : x.push(y))
 	
 	for line in lines:
 		interpret_line(line, env)
