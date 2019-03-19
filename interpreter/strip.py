@@ -13,17 +13,19 @@ def evalexpr(value, env: Environment):
 		return evalexpr(value[1:-1], env)
 	elif islambda(value):
 		return getlambda(value, env)
-	elif iscall(value):
-		return docall(value, env)
-	elif isternary(value):
-		return doternary(value, env)
 	elif ismath(value):
 		return domath(value, env)
 	elif isquoted(value):
 		str = removeSpaces(value)[1:-1]
 		str = re.sub(r'\\n','\n',str)
 		return str
-	elif isvar(value, env) is not None:
+	elif iscall(value):
+		return docall(value, env)
+	elif isternary(value):
+		return doternary(value, env)
+	
+	
+	elif isvar(value, env):
 		return env.variables[value]
 	else:
 		error('Expression "' + value +'" unable to be evaluated.')
@@ -57,31 +59,32 @@ def doternary(value, env: Environment):
 	
 
 def docall(value, env: Environment):
-	def getname(value: str):
+	def get(value: str):
 		cstr = ""
+		first = None
+		depth = 0
 		for char in value:
-			if char == '.':
-				return cstr
-			else:
+			if first != None:
 				cstr += char
-		return None
-	def getparams(value: str):
-		cstr = ""
-		hit = False
-		for char in value:
-			if hit:
-				cstr += char
-			if char == '.':
-				hit = True
-		return cstr
-		
-	name = getname(value)
-	params = getparams(value)
+				continue
+			if char == '{':
+				depth += 1
+			elif char == '}':
+				depth -= 1
+			if depth == 0:
+				if char == '.':
+					first = cstr
+					cstr = ""
+					continue
+			cstr += char
+		return first,cstr
 	
-	func = env.variables.get(name, None)
-	if not callable(func):
-		error(name + ' not a callable object.')
-	res = func(evalexpr(params, env))
+	before, after = get(value)
+	before = evalexpr(before, env)
+	after = evalexpr(after, env)
+	if not callable(before):
+		error(str(before) + ' not a callable object.')
+	res = before(after)
 	return res
 		
 		

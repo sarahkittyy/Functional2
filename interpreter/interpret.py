@@ -1,7 +1,7 @@
 ###
 
 from interpreter.tests import isnum, isquoted, islambda, iscall
-from interpreter.strip import evalexpr, docall
+from interpreter.strip import evalexpr, docall, isfullexpr
 from interpreter.env import Environment
 import re
 
@@ -23,9 +23,11 @@ def interpret_line(line):
 		value = x.group(2)
 		if isnum(value):
 			value = float(value)
+		elif iscall(value):
+			value = docall(value, env)
 		elif isquoted(value):
 			value = value.strip()[1:-1]
-		elif islambda(value):
+		elif isfullexpr(value):
 			value = evalexpr(value[1:-1], env)
 		env.variables[name] = value
 	# calls

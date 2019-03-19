@@ -74,3 +74,7 @@ Ex:
 addOne = { x -> x + 1 }
 out.{addOne.5} ~$ Outputs 6.
 ```
+
+## Examples
+
+See `examples/`
