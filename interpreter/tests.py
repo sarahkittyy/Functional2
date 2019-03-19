@@ -2,7 +2,7 @@ import re
 
 def isnum(val):
 	try:
-		y = float(val)
+		float(val)
 	except ValueError:
 		return False
 	except TypeError:

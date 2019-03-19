@@ -25,7 +25,7 @@ def evalexpr(value, env: Environment):
 		return doternary(value, env)
 	
 	
-	elif isvar(value, env):
+	elif isvar(value, env) != None:
 		return env.variables[value]
 	else:
 		error('Expression "' + value +'" unable to be evaluated.')
@@ -104,7 +104,7 @@ def isfullexpr(value):
 	# return (re.match(r'^\{[^(\}|\{)]*\}$', value) != None)
 
 def isvar(value, env: Environment):
-	return env.variables.get(value, False)
+	return env.variables.get(value, None)
 	
 def islambda(value):
 	return (re.match(r'(.*)->(.*)', value) != None)
@@ -138,7 +138,17 @@ def getlambda(value, env: Environment):
 	return lambda v : dolambdamath(left, right, v, env)
 	
 def ismath(value):
-	return (re.match(r'.*(\+|-|\*|/|%|&).*', value) != None)
+	cstr = ""
+	depth = 0
+	for char in value:
+		if char == '{':
+			depth += 1
+		elif char == '}':
+			depth -= 1
+		
+		if depth == 0 and char in '+-*/%&':
+			return True
+	return False
 	
 def domath(value, env: Environment):
 	# get left, oper, right from the expression
