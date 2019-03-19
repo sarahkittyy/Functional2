@@ -92,6 +92,8 @@ def isfullexpr(value):
 		if char == '{':
 			depth += 1
 			hit = True
+		if hit and depth == 0:
+			return False
 		elif char == '}':
 			depth -= 1
 			hit = True
