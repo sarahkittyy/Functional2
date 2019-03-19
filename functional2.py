@@ -1,10 +1,16 @@
 from interpreter.clean import clean
 from interpreter.interpret import interpret
 import sys
+import os
+
+def runFile(filename):
+	lines = []
+	path = ""
+	with open(filename, 'r+') as f:
+		lines = f.readlines()
+		path = os.path.dirname(f.name)
+	lines = clean(lines)
+	return interpret(lines, path + '/')
 
 if __name__ == '__main__':
-	lines = []
-	with open(sys.argv[1], 'r') as f:
-		lines = f.readlines()
-	lines = clean(lines)
-	interpret(lines)
+	runFile(sys.argv[1])
