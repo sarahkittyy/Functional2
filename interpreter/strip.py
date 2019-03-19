@@ -52,6 +52,9 @@ def doternary(value, env: Environment):
 			if not was:
 				cstr += char
 		outer.append(cstr)
+		if len(outer) != 3:
+			error('Invalid ternary operator ' + str)
+			return ['','','']
 		return outer
 		
 	cond, true, false = splitOuter(value, '{', '}', '?:')[:3]
@@ -138,7 +141,6 @@ def getlambda(value, env: Environment):
 	return lambda v : dolambdamath(left, right, v, env)
 	
 def ismath(value):
-	cstr = ""
 	depth = 0
 	for char in value:
 		if char == '{':
@@ -171,6 +173,9 @@ def domath(value, env: Environment):
 			if not was:
 				cstr += char
 		outer.append(cstr)
+		if len(outer) != 3:
+			error("Invalid mathematical operation " + str)
+			return ['','','']
 		return outer
 	
 	
