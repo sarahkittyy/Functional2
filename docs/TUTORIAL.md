@@ -75,6 +75,15 @@ addOne = { x -> x + 1 };
 out.{addOne.5}; ~$ Outputs 6.
 ```
 
+## Objects
+
+```
+object = [
+    1,2,3,4,5
+];
+out.{{get.object}.2}
+```
+
 ## Examples
 
 See `examples/`

@@ -25,3 +25,6 @@ class Environment:
 				count += 1
 		self.variables[count] = val
 		return val
+	
+	def pop(self, key):
+		return self.variables.pop(key, None)
