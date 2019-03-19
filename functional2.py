@@ -13,7 +13,7 @@ def runFile(filename):
 		line = re.sub(pat, '\\1', line)
 		lines = line.split(';')
 	lines = clean(lines)
-	return interpret(lines, path + '/')
+	return interpret(lines, path)
 
 if __name__ == '__main__':
 	runFile(sys.argv[1])
