@@ -17,11 +17,13 @@ def interpret(lines, path):
 			lines = f.readlines()
 			npath = os.path.dirname(f.name)
 		lines = clean(lines)
-		env.merge(interpret(lines, npath + '/'))
+		newenv = interpret(lines, npath + '/')
+		env.merge(newenv)
 	
 	env.variables["out"] = lambda x : print(x, end='')
 	env.variables["in"] = lambda x : input(x)
 	env.variables["import"] = lambda x : impfile(x)
+	env.variables["package"] = lambda x : env.prefix(x)
 	
 	for line in lines:
 		interpret_line(line)
