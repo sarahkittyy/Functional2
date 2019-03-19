@@ -21,9 +21,9 @@ def islambda(val):
 def iscall(val):
 	depth = 0
 	for char in val:
-		if char == '{':
+		if char in '{[':
 			depth += 1
-		elif char == '}':
+		elif char in '}]':
 			depth -= 1
 		if depth == 0 and char == '.':
 			return True

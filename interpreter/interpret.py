@@ -1,7 +1,7 @@
 ###
 
 from interpreter.tests import isnum, isquoted, islambda, iscall
-from interpreter.strip import evalexpr, docall, isfullexpr
+from interpreter.strip import evalexpr, docall, isfullexpr, isstack, getstack, interpret_line
 from interpreter.env import Environment
 from interpreter.clean import clean
 import re
@@ -27,26 +27,8 @@ def interpret(lines, path):
 	env.variables["in"] = lambda x : input(x)
 	env.variables["import"] = lambda x : impfile(x)
 	env.variables["package"] = lambda x : env.prefix(x)
+	env.variables["get"] = lambda x : (lambda y : x.variables.get(y, None))
 	
 	for line in lines:
 		interpret_line(line, env)
 	return env
-		
-def interpret_line(line, env):
-	# assignment
-	x = re.match(r'(.*)=(.*)', line)
-	if x != None:
-		name = x.group(1)
-		value = x.group(2)
-		if isnum(value):
-			value = float(value)
-		elif iscall(value):
-			value = docall(value, env)
-		elif isquoted(value):
-			value = value.strip()[1:-1]
-		elif isfullexpr(value):
-			value = evalexpr(value[1:-1], env)
-		env.variables[name] = value
-	# calls
-	elif iscall(line):
-		docall(line, env)

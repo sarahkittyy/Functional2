@@ -5,12 +5,39 @@ import re
 import copy
 from interpreter.clean import removeSpaces
 
+def interpret_line(line, env):
+	# assignment
+	x = re.match(r'(.*?)=(.*)', line)
+	if x != None:
+		name = x.group(1)
+		value = x.group(2)
+		if isnum(value):
+			value = float(value)
+		elif iscall(value):
+			value = docall(value, env)
+		elif isquoted(value):
+			value = value.strip()[1:-1]
+		elif isfullexpr(value):
+			value = evalexpr(value[1:-1], env)
+		elif isstack(value):
+			value = getstack(value[1:-1], env)
+		env.variables[name] = value
+	# calls
+	elif iscall(line):
+		docall(line, env)
+	else:
+		env.variables[len(env.variables)] = evalexpr(line, env)
+	
+	return env
+
 # takes in a string, and returns the inner code tree.
 def evalexpr(value, env: Environment):
 	if isnum(value):
 		return float(value)
 	elif isfullexpr(value):
 		return evalexpr(value[1:-1], env)
+	elif isstack(value):
+		return getstack(value, env)
 	elif islambda(value):
 		return getlambda(value, env)
 	elif isquoted(value):
@@ -27,6 +54,27 @@ def evalexpr(value, env: Environment):
 		return env.variables[value]
 	else:
 		error('Expression "' + value +'" unable to be evaluated.')
+		
+def isstack(value):
+	depth = 0
+	hit = False
+	for char in value:
+		if char == '[':
+			depth += 1
+			hit = True
+		if hit and depth == 0:
+			return False
+		elif char == ']':
+			depth -= 1
+			hit = True
+	return depth == 0 and hit and (re.match(r'^\[.*\]$', value) != None)
+
+def getstack(value, env: Environment):
+	rawvals = value.split(',')
+	newenv = copy.deepcopy(env)
+	for val in rawvals:
+		interpret_line(val, newenv)
+	return newenv
 		
 def isternary(value):
 	return (re.match(r'.*\?.*\:.*', value) != None)

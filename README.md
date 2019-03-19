@@ -1,6 +1,6 @@
 # Functional 2
 
-A functional language.
+It's basically C
 
 ## Usage
 

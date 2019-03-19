@@ -12,6 +12,6 @@ class Environment:
 	def merge(self, env):
 		newdict = {}
 		for key, value in env.variables.items():
-			key = env.__prefix__ + key
+			key = env.__prefix__ + str(key)
 			newdict[key] = value
 		self.variables.update(newdict)
